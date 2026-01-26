@@ -29,12 +29,6 @@
     "address": {
       "type": "string"
     },
-    "products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product",
-      "mappedBy": "store"
-    },
     "owner": {
       "type": "relation",
       "relation": "oneToOne",
@@ -60,6 +54,12 @@
         "videos",
         "audios"
       ]
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "store"
     }
   }
 }

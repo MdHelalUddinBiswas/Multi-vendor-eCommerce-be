@@ -71,6 +71,12 @@
       "relation": "oneToOne",
       "target": "api::store.store",
       "mappedBy": "owner"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "seller"
     }
   }
 }

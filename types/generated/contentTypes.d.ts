@@ -433,7 +433,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
-    description: 'Product catalog';
     displayName: 'Product';
     pluralName: 'products';
     singularName: 'product';
@@ -447,7 +446,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    images: Schema.Attribute.Media<
+    image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
@@ -460,14 +459,14 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    price: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    price: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     seller: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.user'
     >;
     sku: Schema.Attribute.String;
-    stock: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    stock: Schema.Attribute.Integer;
     store: Schema.Attribute.Relation<'manyToOne', 'api::store.store'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -995,6 +994,7 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;

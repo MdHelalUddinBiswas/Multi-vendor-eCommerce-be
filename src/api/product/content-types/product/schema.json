@@ -4,8 +4,7 @@
   "info": {
     "singularName": "product",
     "pluralName": "products",
-    "displayName": "Product",
-    "description": "Product catalog"
+    "displayName": "Product"
   },
   "options": {
     "draftAndPublish": true
@@ -16,27 +15,25 @@
       "type": "string",
       "required": true
     },
+    "price": {
+      "type": "integer",
+      "required": true
+    },
     "description": {
       "type": "text"
-    },
-    "price": {
-      "type": "decimal",
-      "required": true
     },
     "comparePrice": {
       "type": "decimal"
     },
     "stock": {
-      "type": "integer",
-      "default": 0
+      "type": "integer"
     },
     "sku": {
       "type": "string"
     },
-    "images": {
+    "image": {
       "type": "media",
       "multiple": true,
-      "required": false,
       "allowedTypes": [
         "images",
         "files",
@@ -55,7 +52,8 @@
     "seller": {
       "type": "relation",
       "relation": "manyToOne",
-      "target": "plugin::users-permissions.user"
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "products"
     },
     "store": {
       "type": "relation",
