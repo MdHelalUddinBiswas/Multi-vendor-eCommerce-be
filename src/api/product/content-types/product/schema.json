@@ -34,12 +34,7 @@
     "image": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     },
     "isFeatured": {
       "type": "boolean",
@@ -60,6 +55,35 @@
       "relation": "manyToOne",
       "target": "api::store.store",
       "inversedBy": "products"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "product"
+    },
+    "category": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "decimal",
+      "default": 0
+    },
+    "reviews": {
+      "type": "integer",
+      "default": 0
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "product"
+    },
+    "cartItems": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::cart-item.cart-item",
+      "mappedBy": "product"
     }
   }
 }
