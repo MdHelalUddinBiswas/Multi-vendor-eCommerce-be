@@ -138,7 +138,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         });
 
       if (!customerRole) {
-        return ctx.internalServerError("Customer role not found");
+        return ctx.internalServerError("Customer role not found. Please ensure a role with type 'customer' exists.");
       }
 
       // Update user: confirm email, change role, clear verification code
@@ -172,7 +172,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       });
     } catch (error) {
       console.error("Email verification error:", error);
-      return ctx.internalServerError("Email verification failed");
+      return ctx.internalServerError(error instanceof Error ? error.message : "Email verification failed");
     }
   },
 

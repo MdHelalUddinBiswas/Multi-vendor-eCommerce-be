@@ -83,6 +83,20 @@
       "relation": "oneToMany",
       "target": "api::order.order",
       "mappedBy": "user"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "verificationCode": {
+      "type": "string",
+      "private": true
+    },
+    "verificationCodeExpiry": {
+      "type": "datetime",
+      "private": true
     }
   }
 }

@@ -1099,6 +1099,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    firstName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1129,6 +1131,9 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
       }>;
+    verificationCode: Schema.Attribute.String & Schema.Attribute.Private;
+    verificationCodeExpiry: Schema.Attribute.DateTime &
+      Schema.Attribute.Private;
   };
 }
 
