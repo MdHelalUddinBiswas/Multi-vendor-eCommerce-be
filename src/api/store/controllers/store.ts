@@ -9,7 +9,15 @@ export default factories.createCoreController('api::store.store', ({ strapi }) =
 
     const store = await strapi.query('api::store.store').findOne({
       where: { owner: user.id },
-      populate: ['logo', 'banner', 'products']
+      populate: {
+        logo: true,
+        banner: true,
+        products: {
+          populate: {
+            image: true
+          }
+        }
+      }
     });
 
     return { store: store || null };

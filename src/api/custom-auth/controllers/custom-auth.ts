@@ -1,8 +1,8 @@
 import { Core } from "@strapi/strapi";
 import crypto from "crypto";
 
-const VERIFICATION_CODE_EXPIRY = 1 * 70 * 1000; // 70 seconds (1 minute 10 seconds)
-const VERIFICATION_RESET_CODE_EXPIRY = 3 * 60 * 1000; // 3 minutes
+const VERIFICATION_CODE_EXPIRY = 5 * 60 * 1000; // 5 minutes
+const VERIFICATION_RESET_CODE_EXPIRY = 10 * 60 * 1000; // 10 minutes for extended reset flow
 
 const bcrypt = require("bcryptjs");
 
@@ -76,7 +76,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
                   ${verificationCode}
                 </span>
               </div>
-              <p style="font-size: 14px; color: #555;">This code will expire in <strong>1 minute</strong>. If you didn't sign up for this, you can safely ignore this email.</p>
+              <p style="font-size: 14px; color: #555;">This code will expire in <strong>5 minutes</strong>. If you didn't sign up for this, you can safely ignore this email.</p>
               <hr style="margin: 32px 0; border: none; border-top: 1px solid #eee;" />
               <p style="font-size: 12px; color: #999; text-align: center;">© ${new Date().getFullYear()} ShopHub. All rights reserved.</p>
             </div>
@@ -223,7 +223,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           <h1>Email Verification</h1>
           <p>Your new verification code is:</p>
           <h2 style="background: #f4f4f4; padding: 10px; text-align: center; font-size: 32px; letter-spacing: 5px;">${verificationCode}</h2>
-          <p>This code will expire in 1 minute.</p>
+          <p>This code will expire in 5 minutes.</p>
         `,
         });
 
@@ -388,8 +388,19 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
       }
 
       // Validate password strength
-      if (password.length < 6) {
-        return ctx.badRequest("Password must be at least 6 characters long");
+      if (password.length < 8) {
+        return ctx.badRequest("Password must be at least 8 characters long");
+      }
+
+      // Check for uppercase, lowercase, and number
+      if (!/[A-Z]/.test(password)) {
+        return ctx.badRequest("Password must contain at least one uppercase letter");
+      }
+      if (!/[a-z]/.test(password)) {
+        return ctx.badRequest("Password must contain at least one lowercase letter");
+      }
+      if (!/[0-9]/.test(password)) {
+        return ctx.badRequest("Password must contain at least one number");
       }
 
       // Find user with reset code

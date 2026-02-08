@@ -97,6 +97,11 @@
     "verificationCodeExpiry": {
       "type": "datetime",
       "private": true
+    },
+    "mobailNumber": {
+      "type": "integer",
+      "required": true,
+      "unique": true
     }
   }
 }
