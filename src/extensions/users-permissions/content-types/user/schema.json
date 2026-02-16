@@ -78,12 +78,6 @@
       "target": "api::product.product",
       "mappedBy": "seller"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::order.order",
-      "mappedBy": "user"
-    },
     "firstName": {
       "type": "string"
     },
@@ -102,6 +96,18 @@
       "type": "integer",
       "required": true,
       "unique": true
+    },
+    "order": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "rider"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "user"
     }
   }
 }

@@ -4,38 +4,23 @@
   "info": {
     "singularName": "order",
     "pluralName": "orders",
-    "displayName": "Order",
-    "description": "Customer orders"
+    "displayName": "Order"
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "amount": {
-      "type": "decimal",
-      "required": true
+      "type": "integer"
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "pending",
-        "processing",
-        "shipped",
-        "delivered",
-        "cancelled"
-      ],
-      "default": "pending"
+    "orderId": {
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "orderDate": {
-      "type": "datetime",
-      "required": true
-    },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "orders"
+      "type": "date"
     },
     "product": {
       "type": "relation",
@@ -43,10 +28,33 @@
       "target": "api::product.product",
       "inversedBy": "orders"
     },
-    "orderId": {
-      "type": "string",
-      "unique": true,
-      "required": true
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "orders"
+    },
+    "orderStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "paid",
+        "confirmed",
+        "preparing",
+        "readyForPickup",
+        "assignedToRider",
+        "pickedUp",
+        "outForDelivery",
+        "delivered",
+        "completed",
+        "cancelled"
+      ]
+    },
+    "rider": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "order"
     }
   }
 }

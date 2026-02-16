@@ -505,32 +505,46 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
 export interface ApiOrderOrder extends Struct.CollectionTypeSchema {
   collectionName: 'orders';
   info: {
-    description: 'Customer orders';
     displayName: 'Order';
     pluralName: 'orders';
     singularName: 'order';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
-    amount: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    amount: Schema.Attribute.Integer;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::order.order'> &
       Schema.Attribute.Private;
-    orderDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    orderDate: Schema.Attribute.Date;
     orderId: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    orderStatus: Schema.Attribute.Enumeration<
+      [
+        'pending',
+        'paid',
+        'confirmed',
+        'preparing',
+        'readyForPickup',
+        'assignedToRider',
+        'pickedUp',
+        'outForDelivery',
+        'delivered',
+        'completed',
+        'cancelled',
+      ]
+    >;
     product: Schema.Attribute.Relation<'manyToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    status: Schema.Attribute.Enumeration<
-      ['pending', 'processing', 'shipped', 'delivered', 'cancelled']
-    > &
-      Schema.Attribute.DefaultTo<'pending'>;
+    rider: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1114,6 +1128,7 @@ export interface PluginUsersPermissionsUser
     mobailNumber: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    order: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     orders: Schema.Attribute.Relation<'oneToMany', 'api::order.order'>;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
