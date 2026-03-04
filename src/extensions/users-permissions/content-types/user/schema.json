@@ -78,6 +78,15 @@
       "target": "api::product.product",
       "mappedBy": "seller"
     },
+    "accountType": {
+      "type": "enumeration",
+      "enum": [
+        "customer",
+        "seller",
+        "rider"
+      ],
+      "default": "customer"
+    },
     "firstName": {
       "type": "string"
     },
@@ -92,10 +101,11 @@
       "type": "datetime",
       "private": true
     },
-    "mobailNumber": {
-      "type": "integer",
-      "required": true,
-      "unique": true
+    "phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
     },
     "order": {
       "type": "relation",

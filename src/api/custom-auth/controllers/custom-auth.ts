@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 export default ({ strapi }: { strapi: Core.Strapi }) => ({
   async register(ctx) {
     try {
-      const { email, password, username, firstName, lastName } =
+      const { email, password, username, firstName, lastName, accountType, phone, address } =
         ctx.request.body;
 
       // Check if user exists
@@ -56,6 +56,9 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           role: publicRole.id,
           verificationCode,
           verificationCodeExpiry: codeExpiry,
+          accountType: accountType || "customer",
+          phone,
+          address,
         });
 
       // Send verification email
@@ -130,15 +133,16 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
         return ctx.badRequest("Verification code has expired");
       }
 
-      // Get customer role (default for new users)
-      const customerRole = await strapi.db
+      // Get role based on user's accountType
+      const requestedRoleType = user.accountType || "customer";
+      const targetRole = await strapi.db
         .query("plugin::users-permissions.role")
         .findOne({
-          where: { type: "customer" },
+          where: { type: requestedRoleType },
         });
 
-      if (!customerRole) {
-        return ctx.internalServerError("Customer role not found. Please ensure a role with type 'customer' exists.");
+      if (!targetRole) {
+        return ctx.internalServerError(`${requestedRoleType} role not found. Please ensure a role with type '${requestedRoleType}' exists.`);
       }
 
       // Update user: confirm email, change role, clear verification code
@@ -148,7 +152,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           where: { id: user.id },
           data: {
             confirmed: true,
-            role: customerRole.id,
+            role: targetRole.id,
             verificationCode: null,
             verificationCodeExpiry: null,
           },
@@ -167,7 +171,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => ({
           username: updatedUser.username,
           email: updatedUser.email,
           confirmed: updatedUser.confirmed,
-          role: customerRole.name,
+          role: targetRole.name,
+          accountType: updatedUser.accountType,
         },
       });
     } catch (error) {
